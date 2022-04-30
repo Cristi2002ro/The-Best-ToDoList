@@ -1,27 +1,24 @@
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class ToDoFrame extends JFrame {
+    ArrayList<JTextField> fields =new ArrayList<>();
+    ArrayList<JLabel> labels=new ArrayList<>();
+    ArrayList<JButton> buttons=new ArrayList<>();
 
     ToDoFrame() {
-        // setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
+
         setTitle("To do list");
         setSize(new Dimension(600, 800));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        ImageIcon img = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\2.png");
+        ImageIcon img = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\frameIcon.png");
         setIconImage(img.getImage());
         setLocationRelativeTo(null);
         setResizable(false);
-
 
         JPanel title = new JPanel();
         title.setPreferredSize(new Dimension(600, 80));
@@ -38,19 +35,30 @@ public class ToDoFrame extends JFrame {
         mainPanel.setLayout(new FlowLayout());
         mainPanel.setPreferredSize(new Dimension(600, 0));
 
-        //add task button:
-        JButton addTask = new JButton("Add task");
+        //add delete task buttons and panel:
+        JButton addTask = new JButton();
+        addTask.setPreferredSize(new Dimension(50, 50));
+        addTask.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\addTask.png"));
         addTask.setFocusable(false);
+
+        JButton deleteTask = new JButton();
+        deleteTask.setPreferredSize(new Dimension(50, 50));
+        deleteTask.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\delete.png"));
+        deleteTask.setFocusable(false);
+
         JPanel buttonpanel = new JPanel();
-        buttonpanel.setLayout(new FlowLayout());
-        buttonpanel.add(addTask, LEFT_ALIGNMENT);
-        buttonpanel.setPreferredSize(new Dimension(600, 40));
+        buttonpanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 5));
+        buttonpanel.add(addTask);
+        buttonpanel.add(deleteTask);
+        buttonpanel.setPreferredSize(new Dimension(600, 60));
+
+        //action listeners for add and delete
         addTask.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JLabel iconLabel = new JLabel();
                 iconLabel.setPreferredSize(new Dimension(50, 40));
-                ImageIcon icon = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\3.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png");
                 iconLabel.setIcon(icon);
 
                 JTextField textField = new JTextField();
@@ -64,12 +72,12 @@ public class ToDoFrame extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (done.getText().equals("Done")) {
-                            iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\1.png"));
+                            iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
                             done.setText("Undone");
                             textField.setBackground(Color.GREEN);
                             setVisible(true);
                         } else {
-                            iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\3.png"));
+                            iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
                             done.setText("Done");
                             textField.setBackground(Color.WHITE);
                             setVisible(true);
@@ -79,16 +87,44 @@ public class ToDoFrame extends JFrame {
                 done.setFocusable(false);
                 done.setPreferredSize(new Dimension(80, 40));
 
+                fields.add(textField);
+                labels.add(iconLabel);
+                buttons.add(done);
+
                 mainPanel.add(iconLabel);
                 mainPanel.add(textField);
                 mainPanel.add(done);
-                mainPanel.setPreferredSize(new Dimension(600,mainPanel.getHeight()+40));
+                mainPanel.setPreferredSize(new Dimension(600, mainPanel.getHeight() + 40));
                 setVisible(true);
             }
         });
 
-        JScrollPane scrollPane = new JScrollPane(mainPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        //COULD BE BETTER
 
+        deleteTask.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i< fields.size(); i++) {
+                    if(fields.get(i).getBackground()==Color.GREEN){
+                        mainPanel.remove(fields.get(i));
+                        mainPanel.remove(buttons.get(i));
+                        mainPanel.remove(labels.get(i));
+
+                        fields.remove(fields.get(i));
+                        buttons.remove(buttons.get(i));
+                        labels.remove(labels.get(i));
+
+                        mainPanel.repaint();
+                        mainPanel.setVisible(true);
+                        repaint();
+                        setVisible(true);
+                    }
+                }
+            }
+        });
+
+        //adds:
+        JScrollPane scrollPane = new JScrollPane(mainPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(title, BorderLayout.NORTH);
         add(buttonpanel, BorderLayout.SOUTH);
         add(scrollPane, BorderLayout.CENTER);

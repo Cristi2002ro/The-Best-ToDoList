@@ -18,7 +18,7 @@ public class LoginFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Login");
-        ImageIcon icon = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\1.jpg");
+        ImageIcon icon = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\login.jpg");
         setIconImage(icon.getImage());
 
         JLabel title = new JLabel("Login");
