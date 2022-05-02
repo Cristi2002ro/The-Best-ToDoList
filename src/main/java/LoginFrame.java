@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +27,6 @@ public class LoginFrame extends JFrame {
         title.setSize(new Dimension(500, 50));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setVerticalAlignment(SwingConstants.CENTER);
-
 
         JLabel userLabel = new JLabel("Username:");
         userLabel.setFont(new Font("", Font.PLAIN, 20));
@@ -56,6 +56,7 @@ public class LoginFrame extends JFrame {
         //key listeners for Enter are just for submit
         userField = new JTextField();
         userField.setBounds(140, 101, 300, 30);
+        userField.setFont(new Font("MV Boli",Font.PLAIN,20));
         userField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -67,8 +68,7 @@ public class LoginFrame extends JFrame {
                     try {
                         if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                             warningLabel.setVisible(false);
-                            new ToDoFrame();
-                            dispose();
+                           activate();
                         } else {
                             warningLabel.setText("Invalid username or password!");
                             warningLabel.setVisible(true);
@@ -86,6 +86,7 @@ public class LoginFrame extends JFrame {
 
         passwordField = new JPasswordField();
         passwordField.setBounds(140, 151, 300, 30);
+        passwordField.setFont(new Font("", Font.PLAIN,20));
         passwordField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -98,8 +99,7 @@ public class LoginFrame extends JFrame {
                     try {
                         if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                             warningLabel.setVisible(false);
-                            new ToDoFrame();
-                            dispose();
+                            activate();
                         } else {
                             warningLabel.setText("Invalid username or password!");
                             warningLabel.setVisible(true);
@@ -125,8 +125,7 @@ public class LoginFrame extends JFrame {
                 try {
                     if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                         warningLabel.setVisible(false);
-                        new ToDoFrame();
-                        dispose();
+                        activate();
                     } else {
                         warningLabel.setText("Invalid username or password!");
                         warningLabel.setVisible(true);
@@ -149,9 +148,7 @@ public class LoginFrame extends JFrame {
 
                         jdbc.insertion(userField.getText(), passwordField.getText());
                         warningLabel.setVisible(false);
-                        new ToDoFrame();
-                        dispose();
-
+                       activate();
                     }else {
                         warningLabel.setText("This username is already taken");
                         warningLabel.setVisible(true);
@@ -174,5 +171,110 @@ public class LoginFrame extends JFrame {
         add(createAcc);
         add(warningLabel);
         setVisible(true);
+    }
+    private void activate(){
+        ToDoFrame frame=new ToDoFrame();
+        frame.setUserID(Integer.parseInt(jdbc.query("select id from users where username='"+userField.getText()+"';")));
+        try {
+            jdbc.statement = jdbc.connection.createStatement();
+            jdbc.resultSet = jdbc.statement.executeQuery("select status, task from tasks where user_id="+frame.getUserID()+";");
+            while (jdbc.resultSet.next()) {
+                if(jdbc.resultSet.getInt(1)==1){
+                    JLabel iconLabel=new JLabel();
+                    iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
+                    JButton done =new JButton();
+                    done.setText("Undone");
+                    JTextField textField=new JTextField();
+                    textField.setBackground(Color.GREEN);
+
+                    done.setFocusable(false);
+                    done.setPreferredSize(new Dimension(80, 40));
+                    done.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (done.getText().equals("Done")) {
+                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
+                                done.setText("Undone");
+                                textField.setBackground(Color.GREEN);
+                                frame.setVisible(true);
+                            } else {
+                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
+                                done.setText("Done");
+                                textField.setBackground(Color.WHITE);
+                                frame.setVisible(true);
+                            }
+                        }
+                    });
+
+                    textField.setPreferredSize(new Dimension(420, 40));
+                    textField.setFont(new Font("MV Boli", Font.TYPE1_FONT, 20));
+                    textField.setBorder(new BevelBorder(BevelBorder.LOWERED));
+                    textField.setVisible(true);
+
+                    iconLabel.setPreferredSize(new Dimension(50, 40));
+
+                    frame.mainPanel.add(iconLabel);
+                    frame.mainPanel.add(textField);
+                    frame.mainPanel.add(done);
+
+                    textField.setText(jdbc.resultSet.getString(2));
+
+                    frame.fields.add(textField);
+                    frame.labels.add(iconLabel);
+                    frame.buttons.add(done);
+                    frame.setVisible(true);
+                    dispose();
+
+
+                    //when the task is not done
+                }else {
+                    JLabel iconLabel=new JLabel();
+                    iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
+                    JButton done =new JButton();
+                    done.setText("Done");
+                    JTextField textField=new JTextField();
+
+                    done.setFocusable(false);
+                    done.setPreferredSize(new Dimension(80, 40));
+                    done.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (done.getText().equals("Done")) {
+                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
+                                done.setText("Undone");
+                                textField.setBackground(Color.GREEN);
+                                frame.setVisible(true);
+                            } else {
+                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
+                                done.setText("Done");
+                                textField.setBackground(Color.WHITE);
+                                frame.setVisible(true);
+                            }
+                        }
+                    });
+
+                    textField.setPreferredSize(new Dimension(420, 40));
+                    textField.setFont(new Font("MV Boli", Font.TYPE1_FONT, 20));
+                    textField.setBorder(new BevelBorder(BevelBorder.LOWERED));
+                    textField.setVisible(true);
+
+                    iconLabel.setPreferredSize(new Dimension(50, 40));
+
+                    frame.mainPanel.add(iconLabel);
+                    frame.mainPanel.add(textField);
+                    frame.mainPanel.add(done);
+
+                    textField.setText(jdbc.resultSet.getString(2));
+
+                    frame.fields.add(textField);
+                    frame.labels.add(iconLabel);
+                    frame.buttons.add(done);
+                    frame.setVisible(true);
+                }
+            }
+            dispose();
+        }catch (Exception v){
+
+        }
     }
 }

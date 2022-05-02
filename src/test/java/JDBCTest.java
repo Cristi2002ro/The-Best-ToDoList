@@ -22,4 +22,15 @@ class JDBCTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void selectId() throws SQLException {
+        jdbc.statement = jdbc.connection.createStatement();
+        jdbc.resultSet = jdbc.statement.executeQuery("select status, task from tasks where user_id=1;");
+        while(jdbc.resultSet.next()){
+           if(jdbc.resultSet.getInt(1)==1){
+               System.out.println("yes");
+           }
+        }
+    }
 }

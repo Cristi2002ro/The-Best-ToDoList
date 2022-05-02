@@ -1,9 +1,10 @@
 import java.sql.*;
+import java.util.Locale;
 
 public class JDBC {
-    private Connection connection;
-    private Statement statement;
-    private ResultSet resultSet;
+     Connection connection;
+     Statement statement;
+     ResultSet resultSet;
 
     private String url;
     private String username;
@@ -19,6 +20,27 @@ public class JDBC {
             e.printStackTrace();
         }
     }
+
+    String query(String text) {
+        text = text.toLowerCase();
+        try {
+            if (!text.contains("select")) {
+                PreparedStatement preparedStatement=connection.prepareStatement(text);
+                preparedStatement.execute();
+                return null;
+            } else {
+                statement = connection.createStatement();
+                resultSet=statement.executeQuery(text);
+                resultSet.next();
+                return String.valueOf(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
     //create acc:
     boolean doesntExist(String user) {

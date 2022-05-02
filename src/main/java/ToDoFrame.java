@@ -4,14 +4,25 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 public class ToDoFrame extends JFrame {
-    ArrayList<JTextField> fields =new ArrayList<>();
-    ArrayList<JLabel> labels=new ArrayList<>();
-    ArrayList<JButton> buttons=new ArrayList<>();
+    private int userID;
+    public int getUserID() {
+        return userID;
+    }
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    private JDBC jdbc = new JDBC("jdbc:mysql://localhost:3307/users", "root", "Password123");
+    ArrayList<JTextField> fields = new ArrayList<>();
+    ArrayList<JLabel> labels = new ArrayList<>();
+    ArrayList<JButton> buttons = new ArrayList<>();
+
+    JPanel mainPanel = new JPanel();
 
     ToDoFrame() {
-
         setTitle("To do list");
         setSize(new Dimension(600, 800));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -31,7 +42,6 @@ public class ToDoFrame extends JFrame {
         title.add(titleLabel);
 
         //main panel
-        JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout());
         mainPanel.setPreferredSize(new Dimension(600, 0));
 
@@ -47,9 +57,8 @@ public class ToDoFrame extends JFrame {
         deleteTask.setFocusable(false);
 
         JPanel buttonpanel = new JPanel();
-        buttonpanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 5));
+        buttonpanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 5));
         buttonpanel.add(addTask);
-        buttonpanel.add(deleteTask);
         buttonpanel.setPreferredSize(new Dimension(600, 60));
 
         //action listeners for add and delete
@@ -100,12 +109,11 @@ public class ToDoFrame extends JFrame {
         });
 
         //COULD BE BETTER
-
         deleteTask.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i< fields.size(); i++) {
-                    if(fields.get(i).getBackground()==Color.GREEN){
+                for (int i = 0; i < fields.size(); i++) {
+                    if (fields.get(i).getBackground() == Color.GREEN) {
                         mainPanel.remove(fields.get(i));
                         mainPanel.remove(buttons.get(i));
                         mainPanel.remove(labels.get(i));
@@ -120,6 +128,30 @@ public class ToDoFrame extends JFrame {
                         setVisible(true);
                     }
                 }
+            }
+        });
+
+        //SAVE BUTTON:
+        JButton saveButton = new JButton("Save");
+        saveButton.setPreferredSize(new Dimension(80, 40));
+        saveButton.setFocusable(false);
+        buttonpanel.add(saveButton);
+        buttonpanel.add(deleteTask);
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //saving:
+                jdbc.query("delete from tasks where user_id=" + userID + ";");
+                for (JTextField f : fields) {
+                    boolean done = f.getBackground() == Color.GREEN;
+
+                    int status;
+                    if (done) status = 1;
+                    else status = 0;
+
+                    jdbc.query("insert into tasks(user_id,task,status) value(" + userID + ",'" + f.getText() + "'," + status + ");");
+                }
+
             }
         });
 
