@@ -167,6 +167,10 @@ public class ToDoFrame extends JFrame {
             }
         });
 
+        mainPanel.setBackground(Color.decode("#8DE5E9"));
+        title.setBackground(Color.decode("#8DE5E9"));
+        buttonpanel.setBackground(Color.decode("#8DE5E9"));
+
         //adds:
         JScrollPane scrollPane = new JScrollPane(mainPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(title, BorderLayout.NORTH);
