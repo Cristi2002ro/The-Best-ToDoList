@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.TimerTask;
 
 public class ToDoFrame extends JFrame {
     private int userID;
@@ -17,8 +16,7 @@ public class ToDoFrame extends JFrame {
 
     private JDBC jdbc = new JDBC("jdbc:mysql://localhost:3307/users", "root", "Password123");
     ArrayList<JTextField> fields = new ArrayList<>();
-    ArrayList<JLabel> labels = new ArrayList<>();
-    ArrayList<JButton> buttons = new ArrayList<>();
+    ArrayList<JCheckBox> checks = new ArrayList<>();
 
     JPanel mainPanel = new JPanel();
 
@@ -42,7 +40,7 @@ public class ToDoFrame extends JFrame {
         title.add(titleLabel);
 
         //main panel
-        mainPanel.setLayout(new FlowLayout());
+        mainPanel.setLayout(new FlowLayout((int) LEFT_ALIGNMENT,5,5));
         mainPanel.setPreferredSize(new Dimension(600, 0));
 
         //add delete task buttons and panel:
@@ -65,44 +63,41 @@ public class ToDoFrame extends JFrame {
         addTask.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JLabel iconLabel = new JLabel();
-                iconLabel.setPreferredSize(new Dimension(50, 40));
-                ImageIcon icon = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png");
-                iconLabel.setIcon(icon);
 
                 JTextField textField = new JTextField();
-                textField.setPreferredSize(new Dimension(420, 40));
+                textField.setPreferredSize(new Dimension(510, 40));
                 textField.setFont(new Font("MV Boli", Font.TYPE1_FONT, 20));
                 textField.setBorder(new BevelBorder(BevelBorder.LOWERED));
                 textField.setVisible(true);
 
-                JButton done = new JButton("Done");
+                JCheckBox done = new JCheckBox();
+                done.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
+                done.setSelectedIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
+                done.setSelected(false);
+                done.setBackground(Color.decode("#8DE5E9"));
                 done.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (done.getText().equals("Done")) {
-                            iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
-                            done.setText("Undone");
-                            textField.setBackground(Color.GREEN);
+                        if (!done.isSelected()) {
+                            textField.setBackground(Color.WHITE);
                             setVisible(true);
                         } else {
-                            iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
-                            done.setText("Done");
-                            textField.setBackground(Color.WHITE);
+                            textField.setBackground(Color.GREEN);
                             setVisible(true);
                         }
                     }
                 });
                 done.setFocusable(false);
-                done.setPreferredSize(new Dimension(80, 40));
+                done.setPreferredSize(new Dimension(40, 40));
+                done.setVerticalAlignment(SwingConstants.CENTER);
+                done.setHorizontalAlignment(SwingConstants.CENTER);
 
                 fields.add(textField);
-                labels.add(iconLabel);
-                buttons.add(done);
+                checks.add(done);
 
-                mainPanel.add(iconLabel);
-                mainPanel.add(textField);
                 mainPanel.add(done);
+                mainPanel.add(textField);
+
                 mainPanel.setPreferredSize(new Dimension(600, mainPanel.getHeight() + 40));
                 setVisible(true);
             }
@@ -115,12 +110,10 @@ public class ToDoFrame extends JFrame {
                 for (int i = 0; i < fields.size(); i++) {
                     if (fields.get(i).getBackground() == Color.GREEN) {
                         mainPanel.remove(fields.get(i));
-                        mainPanel.remove(buttons.get(i));
-                        mainPanel.remove(labels.get(i));
+                        mainPanel.remove(checks.get(i));
 
                         fields.remove(fields.get(i));
-                        buttons.remove(buttons.get(i));
-                        labels.remove(labels.get(i));
+                        checks.remove(checks.get(i));
 
                         mainPanel.repaint();
                         mainPanel.setVisible(true);
@@ -167,6 +160,7 @@ public class ToDoFrame extends JFrame {
             }
         });
 
+        //color
         mainPanel.setBackground(Color.decode("#8DE5E9"));
         title.setBackground(Color.decode("#8DE5E9"));
         buttonpanel.setBackground(Color.decode("#8DE5E9"));

@@ -198,95 +198,86 @@ public class LoginFrame extends JFrame {
             jdbc.resultSet = jdbc.statement.executeQuery("select status, task from tasks where user_id="+frame.getUserID()+";");
             while (jdbc.resultSet.next()) {
                 if(jdbc.resultSet.getInt(1)==1){
-                    JLabel iconLabel=new JLabel();
-                    iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
-                    JButton done =new JButton();
-                    done.setText("Undone");
                     JTextField textField=new JTextField();
                     textField.setBackground(Color.GREEN);
 
+                    JCheckBox done = new JCheckBox();
+                    done.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
+                    done.setSelectedIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
+                    done.setSelected(true);
+                    done.setBackground(Color.decode("#8DE5E9"));
                     done.setFocusable(false);
-                    done.setPreferredSize(new Dimension(80, 40));
+                    done.setPreferredSize(new Dimension(40, 40));
+                    done.setVerticalAlignment(SwingConstants.CENTER);
+                    done.setHorizontalAlignment(SwingConstants.CENTER);
+
                     done.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (done.getText().equals("Done")) {
-                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
-                                done.setText("Undone");
-                                textField.setBackground(Color.GREEN);
+                            if (!done.isSelected()) {
+                                textField.setBackground(Color.WHITE);
                                 frame.setVisible(true);
                             } else {
-                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
-                                done.setText("Done");
-                                textField.setBackground(Color.WHITE);
+                                textField.setBackground(Color.GREEN);
                                 frame.setVisible(true);
                             }
                         }
                     });
 
-                    textField.setPreferredSize(new Dimension(420, 40));
+                    textField.setPreferredSize(new Dimension(510, 40));
                     textField.setFont(new Font("MV Boli", Font.TYPE1_FONT, 20));
                     textField.setBorder(new BevelBorder(BevelBorder.LOWERED));
                     textField.setVisible(true);
 
-                    iconLabel.setPreferredSize(new Dimension(50, 40));
 
-                    frame.mainPanel.add(iconLabel);
-                    frame.mainPanel.add(textField);
                     frame.mainPanel.add(done);
+                    frame.mainPanel.add(textField);
 
                     textField.setText(jdbc.resultSet.getString(2));
 
                     frame.fields.add(textField);
-                    frame.labels.add(iconLabel);
-                    frame.buttons.add(done);
+                    frame.checks.add(done);
                     frame.setVisible(true);
                     dispose();
 
-
                     //when the task is not done
                 }else {
-                    JLabel iconLabel=new JLabel();
-                    iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
-                    JButton done =new JButton();
-                    done.setText("Done");
+                    JCheckBox done = new JCheckBox();
+                    done.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
+                    done.setSelectedIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));                    done.setSelected(false);
+                    done.setBackground(Color.decode("#8DE5E9"));
+                    done.setFocusable(false);
+                    done.setPreferredSize(new Dimension(40, 40));
+                    done.setVerticalAlignment(SwingConstants.CENTER);
+                    done.setHorizontalAlignment(SwingConstants.CENTER);
+
                     JTextField textField=new JTextField();
 
-                    done.setFocusable(false);
-                    done.setPreferredSize(new Dimension(80, 40));
                     done.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (done.getText().equals("Done")) {
-                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
-                                done.setText("Undone");
-                                textField.setBackground(Color.GREEN);
+                            if (!done.isSelected()) {
+                                textField.setBackground(Color.WHITE);
                                 frame.setVisible(true);
                             } else {
-                                iconLabel.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
-                                done.setText("Done");
-                                textField.setBackground(Color.WHITE);
+                                textField.setBackground(Color.GREEN);
                                 frame.setVisible(true);
                             }
                         }
                     });
 
-                    textField.setPreferredSize(new Dimension(420, 40));
+                    textField.setPreferredSize(new Dimension(510, 40));
                     textField.setFont(new Font("MV Boli", Font.TYPE1_FONT, 20));
                     textField.setBorder(new BevelBorder(BevelBorder.LOWERED));
                     textField.setVisible(true);
 
-                    iconLabel.setPreferredSize(new Dimension(50, 40));
-
-                    frame.mainPanel.add(iconLabel);
-                    frame.mainPanel.add(textField);
                     frame.mainPanel.add(done);
+                    frame.mainPanel.add(textField);
 
                     textField.setText(jdbc.resultSet.getString(2));
 
                     frame.fields.add(textField);
-                    frame.labels.add(iconLabel);
-                    frame.buttons.add(done);
+                    frame.checks.add(done);
                     frame.setVisible(true);
                 }
             }
