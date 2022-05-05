@@ -12,6 +12,7 @@ public class LoginFrame extends JFrame {
     private JTextField userField;
     private JPasswordField passwordField;
     private JLabel warningLabel;
+    private JCheckBox showpassword;
 
     LoginFrame() {
         setSize(new Dimension(500, 330));
@@ -41,6 +42,22 @@ public class LoginFrame extends JFrame {
         passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
         passwordLabel.setVerticalAlignment(SwingConstants.NORTH);
         passwordLabel.setBounds(10, 150, 100, 50);
+
+        showpassword =new JCheckBox();
+        showpassword.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\eye.png"));
+        showpassword.setHorizontalAlignment(SwingConstants.CENTER);
+        showpassword.setVerticalAlignment(SwingConstants.CENTER);
+        showpassword.setBounds(440,145,40,40);
+        showpassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(showpassword.isSelected()){
+                    passwordField.setEchoChar((char) 0);
+                }else {
+                    passwordField.setEchoChar('•');
+                }
+            }
+        });
 
         //this is for showing warning messages about authetification
         warningLabel = new JLabel();
@@ -167,6 +184,7 @@ public class LoginFrame extends JFrame {
         add(passwordLabel);
         add(userField);
         add(passwordField);
+        add(showpassword);
         add(submit);
         add(createAcc);
         add(warningLabel);
