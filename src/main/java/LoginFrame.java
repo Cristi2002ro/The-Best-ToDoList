@@ -68,7 +68,7 @@ public class LoginFrame extends JFrame {
                     try {
                         if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                             warningLabel.setVisible(false);
-                           activate();
+                           loadTasks();
                         } else {
                             warningLabel.setText("Invalid username or password!");
                             warningLabel.setVisible(true);
@@ -99,7 +99,7 @@ public class LoginFrame extends JFrame {
                     try {
                         if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                             warningLabel.setVisible(false);
-                            activate();
+                            loadTasks();
                         } else {
                             warningLabel.setText("Invalid username or password!");
                             warningLabel.setVisible(true);
@@ -125,7 +125,7 @@ public class LoginFrame extends JFrame {
                 try {
                     if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                         warningLabel.setVisible(false);
-                        activate();
+                        loadTasks();
                     } else {
                         warningLabel.setText("Invalid username or password!");
                         warningLabel.setVisible(true);
@@ -148,7 +148,7 @@ public class LoginFrame extends JFrame {
 
                         jdbc.insertion(userField.getText(), passwordField.getText());
                         warningLabel.setVisible(false);
-                       activate();
+                       loadTasks();
                     }else {
                         warningLabel.setText("This username is already taken");
                         warningLabel.setVisible(true);
@@ -172,7 +172,7 @@ public class LoginFrame extends JFrame {
         add(warningLabel);
         setVisible(true);
     }
-    private void activate(){
+    private void loadTasks(){
         ToDoFrame frame=new ToDoFrame();
         frame.setUserID(Integer.parseInt(jdbc.query("select id from users where username='"+userField.getText()+"';")));
         try {

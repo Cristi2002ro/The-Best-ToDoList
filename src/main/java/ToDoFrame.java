@@ -151,6 +151,18 @@ public class ToDoFrame extends JFrame {
 
                     jdbc.query("insert into tasks(user_id,task,status) value(" + userID + ",'" + f.getText() + "'," + status + ");");
                 }
+                //tray message:
+                try {
+                    SystemTray tray= SystemTray.getSystemTray();
+                    TrayIcon icon=new TrayIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png").getImage());
+                    tray.add(icon);
+                    icon.displayMessage("Succesfully saved", "The tasks has been succesfully saved", TrayIcon.MessageType.INFO);
+                    icon.setImageAutoSize(true);
+                    Thread.sleep(2000);
+                    tray.remove(icon);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
