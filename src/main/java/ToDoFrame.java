@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 public class ToDoFrame extends JFrame {
     private int userID;
+
     public int getUserID() {
         return userID;
     }
+
     public void setUserID(int userID) {
         this.userID = userID;
     }
@@ -24,7 +26,7 @@ public class ToDoFrame extends JFrame {
         setTitle("To do list");
         setSize(new Dimension(600, 800));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        ImageIcon img = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\frameIcon.png");
+        ImageIcon img = new ImageIcon("src/main/resources/frameIcon.png");
         setIconImage(img.getImage());
         setLocationRelativeTo(null);
         setResizable(false);
@@ -40,18 +42,18 @@ public class ToDoFrame extends JFrame {
         title.add(titleLabel);
 
         //main panel
-        mainPanel.setLayout(new FlowLayout((int) LEFT_ALIGNMENT,5,5));
+        mainPanel.setLayout(new FlowLayout((int) LEFT_ALIGNMENT, 5, 5));
         mainPanel.setPreferredSize(new Dimension(600, 0));
 
         //add delete task buttons and panel:
         JButton addTask = new JButton();
         addTask.setPreferredSize(new Dimension(50, 50));
-        addTask.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\addTask.png"));
+        addTask.setIcon(new ImageIcon("src/main/resources/addTask.png"));
         addTask.setFocusable(false);
 
         JButton deleteTask = new JButton();
         deleteTask.setPreferredSize(new Dimension(50, 50));
-        deleteTask.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\delete.png"));
+        deleteTask.setIcon(new ImageIcon("src/main/resources/delete.png"));
         deleteTask.setFocusable(false);
 
         JPanel buttonpanel = new JPanel();
@@ -71,10 +73,10 @@ public class ToDoFrame extends JFrame {
                 textField.setVisible(true);
 
                 JCheckBox done = new JCheckBox();
-                done.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
-                done.setSelectedIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
+                done.setIcon(new ImageIcon("src/main/resources/undone.png"));
+                done.setSelectedIcon(new ImageIcon("src/main/resources/done.png"));
                 done.setSelected(false);
-                done.setBackground(Color.decode("#8DE5E9"));
+                //done.setBackground(Color.decode("#8DE5E9"));
                 done.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -103,24 +105,11 @@ public class ToDoFrame extends JFrame {
             }
         });
 
-        //COULD BE BETTER
+        //for deleting the tasks that are already done:
         deleteTask.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for (int i = 0; i < fields.size(); i++) {
-                    if (fields.get(i).getBackground() == Color.GREEN) {
-                        mainPanel.remove(fields.get(i));
-                        mainPanel.remove(checks.get(i));
-
-                        fields.remove(fields.get(i));
-                        checks.remove(checks.get(i));
-
-                        mainPanel.repaint();
-                        mainPanel.setVisible(true);
-                        repaint();
-                        setVisible(true);
-                    }
-                }
+                closeDoneTasks();
             }
         });
 
@@ -146,8 +135,8 @@ public class ToDoFrame extends JFrame {
                 }
                 //tray message:
                 try {
-                    SystemTray tray= SystemTray.getSystemTray();
-                    TrayIcon icon=new TrayIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png").getImage());
+                    SystemTray tray = SystemTray.getSystemTray();
+                    TrayIcon icon = new TrayIcon(new ImageIcon("src/main/resources/done.png").getImage());
                     tray.add(icon);
                     icon.displayMessage("Succesfully saved", "The tasks has been succesfully saved", TrayIcon.MessageType.INFO);
                     icon.setImageAutoSize(true);
@@ -160,10 +149,10 @@ public class ToDoFrame extends JFrame {
             }
         });
 
-        //color
-        mainPanel.setBackground(Color.decode("#8DE5E9"));
-        title.setBackground(Color.decode("#8DE5E9"));
-        buttonpanel.setBackground(Color.decode("#8DE5E9"));
+        //color:
+        //mainPanel.setBackground(Color.decode("#8DE5E9"));
+        //title.setBackground(Color.decode("#8DE5E9"));
+        //buttonpanel.setBackground(Color.decode("#8DE5E9"));
 
         //adds:
         JScrollPane scrollPane = new JScrollPane(mainPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -171,6 +160,29 @@ public class ToDoFrame extends JFrame {
         add(buttonpanel, BorderLayout.SOUTH);
         add(scrollPane, BorderLayout.CENTER);
         setVisible(true);
+    }
+
+    private void closeDoneTasks() {
+        while (true) {
+            boolean deletes=false;
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).getBackground() == Color.GREEN) {
+                    mainPanel.remove(fields.get(i));
+                    mainPanel.remove(checks.get(i));
+
+                    fields.remove(fields.get(i));
+                    checks.remove(checks.get(i));
+
+                    mainPanel.repaint();
+                    mainPanel.setVisible(true);
+                    repaint();
+                    setVisible(true);
+                    deletes=true;
+                    break;
+                }
+            }
+            if(!deletes)break;
+        }
     }
 
 }

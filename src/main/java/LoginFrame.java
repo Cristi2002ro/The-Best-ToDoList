@@ -20,7 +20,7 @@ public class LoginFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Login");
-        ImageIcon icon = new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\login.jpg");
+        ImageIcon icon = new ImageIcon("src/main/resources/login.jpg");
         setIconImage(icon.getImage());
 
         JLabel title = new JLabel("Login");
@@ -43,17 +43,18 @@ public class LoginFrame extends JFrame {
         passwordLabel.setVerticalAlignment(SwingConstants.NORTH);
         passwordLabel.setBounds(10, 150, 100, 50);
 
-        showpassword =new JCheckBox();
-        showpassword.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\eye.png"));
+        showpassword = new JCheckBox();
+        showpassword.setIcon(new ImageIcon("src/main/resources/eye.png"));
+        showpassword.setSelectedIcon(new ImageIcon("src/main/resources/noeye.png"));
         showpassword.setHorizontalAlignment(SwingConstants.CENTER);
         showpassword.setVerticalAlignment(SwingConstants.CENTER);
-        showpassword.setBounds(440,145,40,40);
+        showpassword.setBounds(440, 145, 40, 40);
         showpassword.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(showpassword.isSelected()){
+                if (showpassword.isSelected()) {
                     passwordField.setEchoChar((char) 0);
-                }else {
+                } else {
                     passwordField.setEchoChar('•');
                 }
             }
@@ -73,7 +74,7 @@ public class LoginFrame extends JFrame {
         //key listeners for Enter are just for submit
         userField = new JTextField();
         userField.setBounds(140, 101, 300, 30);
-        userField.setFont(new Font("MV Boli",Font.PLAIN,20));
+        userField.setFont(new Font("MV Boli", Font.PLAIN, 20));
         userField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -81,11 +82,11 @@ public class LoginFrame extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     try {
                         if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                             warningLabel.setVisible(false);
-                           loadTasks();
+                            loadTasks();
                         } else {
                             warningLabel.setText("Invalid username or password!");
                             warningLabel.setVisible(true);
@@ -103,7 +104,7 @@ public class LoginFrame extends JFrame {
 
         passwordField = new JPasswordField();
         passwordField.setBounds(140, 151, 300, 30);
-        passwordField.setFont(new Font("", Font.PLAIN,20));
+        passwordField.setFont(new Font("", Font.PLAIN, 20));
         passwordField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -112,7 +113,7 @@ public class LoginFrame extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     try {
                         if (jdbc.validAuth(userField.getText(), passwordField.getText())) {
                             warningLabel.setVisible(false);
@@ -165,8 +166,8 @@ public class LoginFrame extends JFrame {
 
                         jdbc.insertion(userField.getText(), passwordField.getText());
                         warningLabel.setVisible(false);
-                       loadTasks();
-                    }else {
+                        loadTasks();
+                    } else {
                         warningLabel.setText("This username is already taken");
                         warningLabel.setVisible(true);
                     }
@@ -190,22 +191,23 @@ public class LoginFrame extends JFrame {
         add(warningLabel);
         setVisible(true);
     }
-    private void loadTasks(){
-        ToDoFrame frame=new ToDoFrame();
-        frame.setUserID(Integer.parseInt(jdbc.query("select id from users where username='"+userField.getText()+"';")));
+
+    private void loadTasks() {
+        ToDoFrame frame = new ToDoFrame();
+        frame.setUserID(Integer.parseInt(jdbc.query("select id from users where username='" + userField.getText() + "';")));
         try {
             jdbc.statement = jdbc.connection.createStatement();
-            jdbc.resultSet = jdbc.statement.executeQuery("select status, task from tasks where user_id="+frame.getUserID()+";");
+            jdbc.resultSet = jdbc.statement.executeQuery("select status, task from tasks where user_id=" + frame.getUserID() + ";");
             while (jdbc.resultSet.next()) {
-                if(jdbc.resultSet.getInt(1)==1){
-                    JTextField textField=new JTextField();
+                if (jdbc.resultSet.getInt(1) == 1) {
+                    JTextField textField = new JTextField();
                     textField.setBackground(Color.GREEN);
 
                     JCheckBox done = new JCheckBox();
-                    done.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
-                    done.setSelectedIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));
+                    done.setIcon(new ImageIcon("src/main/resources/undone.png"));
+                    done.setSelectedIcon(new ImageIcon("src/main/resources/done.png"));
                     done.setSelected(true);
-                    done.setBackground(Color.decode("#8DE5E9"));
+                    //done.setBackground(Color.decode("#8DE5E9"));
                     done.setFocusable(false);
                     done.setPreferredSize(new Dimension(40, 40));
                     done.setVerticalAlignment(SwingConstants.CENTER);
@@ -241,17 +243,18 @@ public class LoginFrame extends JFrame {
                     dispose();
 
                     //when the task is not done
-                }else {
+                } else {
                     JCheckBox done = new JCheckBox();
-                    done.setIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\undone.png"));
-                    done.setSelectedIcon(new ImageIcon("C:\\Users\\Alexandru Duna\\IdeaProjects\\ToDoList\\src\\main\\resources\\done.png"));                    done.setSelected(false);
-                    done.setBackground(Color.decode("#8DE5E9"));
+                    done.setIcon(new ImageIcon("src/main/resources/undone.png"));
+                    done.setSelectedIcon(new ImageIcon("src/main/resources/done.png"));
+                    done.setSelected(false);
+                    //done.setBackground(Color.decode("#8DE5E9"));
                     done.setFocusable(false);
                     done.setPreferredSize(new Dimension(40, 40));
                     done.setVerticalAlignment(SwingConstants.CENTER);
                     done.setHorizontalAlignment(SwingConstants.CENTER);
 
-                    JTextField textField=new JTextField();
+                    JTextField textField = new JTextField();
 
                     done.addActionListener(new ActionListener() {
                         @Override
@@ -282,7 +285,7 @@ public class LoginFrame extends JFrame {
                 }
             }
             dispose();
-        }catch (Exception v){
+        } catch (Exception v) {
 
         }
     }
