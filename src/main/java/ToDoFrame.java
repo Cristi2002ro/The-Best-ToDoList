@@ -4,7 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
+/**
+    To do frame class is the actual app that the user will get after the login. This class needs to know the userID in order
+ to load tasks from the right user, and a connection to database.
+    To do frame is a JFrame that displays the tasks
+ */
 public class ToDoFrame extends JFrame {
     private int userID;
 
@@ -23,6 +27,7 @@ public class ToDoFrame extends JFrame {
     JPanel mainPanel = new JPanel();
 
     ToDoFrame() {
+        //frame settings:
         setTitle("To do list");
         setSize(new Dimension(600, 800));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -31,6 +36,7 @@ public class ToDoFrame extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
+        //title:
         JPanel title = new JPanel();
         title.setPreferredSize(new Dimension(600, 80));
 
@@ -76,7 +82,6 @@ public class ToDoFrame extends JFrame {
                 done.setIcon(new ImageIcon("src/main/resources/undone.png"));
                 done.setSelectedIcon(new ImageIcon("src/main/resources/done.png"));
                 done.setSelected(false);
-                //done.setBackground(Color.decode("#8DE5E9"));
                 done.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -149,11 +154,6 @@ public class ToDoFrame extends JFrame {
             }
         });
 
-        //color:
-        //mainPanel.setBackground(Color.decode("#8DE5E9"));
-        //title.setBackground(Color.decode("#8DE5E9"));
-        //buttonpanel.setBackground(Color.decode("#8DE5E9"));
-
         //adds:
         JScrollPane scrollPane = new JScrollPane(mainPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         add(title, BorderLayout.NORTH);
@@ -162,6 +162,10 @@ public class ToDoFrame extends JFrame {
         setVisible(true);
     }
 
+    /**This method is used to delete the green tasks, that are already done. It's made for the delete task button.
+     If in the fields arrayList exists a green field, that will be deleted and will break because of the arrayList shift of the indexes .
+     This process will repeat until on the fields arraylist will not exist any green field.
+    */
     private void closeDoneTasks() {
         while (true) {
             boolean deletes=false;

@@ -15,6 +15,7 @@ public class LoginFrame extends JFrame {
     private JCheckBox showpassword;
 
     LoginFrame() {
+        //frame settings:
         setSize(new Dimension(500, 330));
         setResizable(false);
         setLocationRelativeTo(null);
@@ -23,12 +24,14 @@ public class LoginFrame extends JFrame {
         ImageIcon icon = new ImageIcon("src/main/resources/login.jpg");
         setIconImage(icon.getImage());
 
+        //title
         JLabel title = new JLabel("Login");
         title.setFont(new Font("", Font.PLAIN, 40));
         title.setSize(new Dimension(500, 50));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setVerticalAlignment(SwingConstants.CENTER);
 
+        //username:
         JLabel userLabel = new JLabel("Username:");
         userLabel.setFont(new Font("", Font.PLAIN, 20));
         userLabel.setSize(new Dimension(500, 30));
@@ -36,6 +39,7 @@ public class LoginFrame extends JFrame {
         userLabel.setVerticalAlignment(SwingConstants.NORTH);
         userLabel.setBounds(10, 100, 100, 50);
 
+        //password:
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setFont(new Font("", Font.PLAIN, 20));
         passwordLabel.setSize(new Dimension(500, 30));
@@ -43,6 +47,7 @@ public class LoginFrame extends JFrame {
         passwordLabel.setVerticalAlignment(SwingConstants.NORTH);
         passwordLabel.setBounds(10, 150, 100, 50);
 
+        //show password button:
         showpassword = new JCheckBox();
         showpassword.setIcon(new ImageIcon("src/main/resources/eye.png"));
         showpassword.setSelectedIcon(new ImageIcon("src/main/resources/noeye.png"));
@@ -65,7 +70,6 @@ public class LoginFrame extends JFrame {
         warningLabel.setFont(new Font("", Font.PLAIN, 15));
         warningLabel.setForeground(Color.RED);
         warningLabel.setOpaque(true);
-        //warningLabel.setBackground(Color.BLACK);
         warningLabel.setHorizontalAlignment(SwingConstants.CENTER);
         warningLabel.setVerticalAlignment(SwingConstants.CENTER);
         warningLabel.setBounds(100, 190, 300, 20);
@@ -134,6 +138,7 @@ public class LoginFrame extends JFrame {
             }
         });
 
+        //submit buuton that verify if the username and password combination is correct
         JButton submit = new JButton("Submit");
         submit.setBounds(60, 220, 150, 30);
         submit.setFocusable(false);
@@ -154,6 +159,7 @@ public class LoginFrame extends JFrame {
             }
         });
 
+        //create a new account button:
         JButton createAcc = new JButton("Create account");
         createAcc.setBounds(280, 220, 150, 30);
         createAcc.setFocusable(false);
@@ -179,6 +185,7 @@ public class LoginFrame extends JFrame {
             }
         });
 
+        //frame adds:
         add(title, BorderLayout.NORTH);
         setLayout(null);
         add(userLabel);
@@ -192,6 +199,8 @@ public class LoginFrame extends JFrame {
         setVisible(true);
     }
 
+    /**Function that load the tasks from the right user and will open a To do frame with that tasks
+     */
     private void loadTasks() {
         ToDoFrame frame = new ToDoFrame();
         frame.setUserID(Integer.parseInt(jdbc.query("select id from users where username='" + userField.getText() + "';")));
